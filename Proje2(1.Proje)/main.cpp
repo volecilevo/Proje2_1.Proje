@@ -27,6 +27,8 @@ GLuint loadTexture(Image* image) {
 	GLuint textureId;
 	glGenTextures(1, &textureId); //Make room for our texture
 	glBindTexture(GL_TEXTURE_2D, textureId); //Tell OpenGL which texture to edit
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);   // değişiklik 13.03.2013
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);   // değişiklik 13.03.2013
 	//Map the image to the texture
 	glTexImage2D(GL_TEXTURE_2D,                //Always GL_TEXTURE_2D
 				 0,                            //0 for now
@@ -153,10 +155,15 @@ static void Draw(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);  // değişiklik
     //  Güneş çizdirme   //    // Güneş Texture ı başlangıçta gözüküyo, ancak ışıklandırma ile ilgili olarak farklı bir renge bürünüyor
     glPushMatrix();
+    glDisable(GL_LIGHTING);    // değişiklik 13.03.2013 // skybox dan önce güneşte olduğu gibi ışıklandırma disable edilip camera rotasyonları verilmeli
+    glRotated(cameraangleX, 1, 0, 0); // değişiklik 13.03.2013
+    glRotated(cameraangleY, 0, 1, 0);  // değişiklik 13.03.2013
     skybox();      // skybox çizdirme
     glPopMatrix();
+    glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, _textureId[0]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
